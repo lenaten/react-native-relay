@@ -5,7 +5,6 @@
 'use strict';
 
 var React = require('react-native');
-var Relay = require('react-relay');
 var {
   AppRegistry,
   StyleSheet,
