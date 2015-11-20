@@ -1,0 +1,3 @@
+rootProject.name = 'fix'
+
+include ':app'

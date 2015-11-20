@@ -1,0 +1,12 @@
+{
+  "name": "fix",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "react-native start"
+  },
+  "dependencies": {
+    "react-native": "0.13.0",
+    "react-relay": "0.4.0"
+  }
+}
