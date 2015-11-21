@@ -8,7 +8,7 @@ Fix the compatibility issue as described in https://github.com/facebook/relay/is
 
 You actually only need the node_modules folder and update your dependencies list in package.json.
 - copy `node_modules` recursively to your exisitng project.
-- add these dependency `package.json` file:
+- add these dependency to your `package.json` file:
   - "react-native": "0.13.0"
   - "react-relay": "0.4.0"
 
