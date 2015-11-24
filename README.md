@@ -32,4 +32,6 @@ Relay.injectNetworkLayer(
 ## todo
 - add basic graphql server for easy start
 
-Thanks @skevy. You did the real work.
+## thanks
+- @skevy. You did the real work.
+- @boourns
