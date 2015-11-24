@@ -2,7 +2,7 @@
 
 A working version of react-native with relay.
 
-Fix the compatibility issue as described in https://github.com/facebook/relay/issues/26, by add fixed node_module to git. 
+Fix the compatibility issue as described in https://github.com/facebook/relay/issues/26. 
 
 ## getting started 
 - `git clone https://github.com/lenaten/react-native-relay.git`
