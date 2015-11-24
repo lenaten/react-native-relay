@@ -4,25 +4,25 @@ A working version of react-native with relay.
 
 Fix the compatibility issue as described in https://github.com/facebook/relay/issues/26. 
 
-## getting started 
-- clone the repo
+## Getting Started 
+- Clone the repo
   - `git clone https://github.com/lenaten/react-native-relay.git`
-- let relay client understand your schema
-  - copy your `schema.json` as generated from relay's `updateSchema.js` script to `data/schema.json`.
-- let relay client know your graphql server address
-  - if you run your app in virtual machine or real device, you need to set your graphql address in index.android.js and index.ios.js. for example:
+- Let relay client understand your schema
+  - Copy your `schema.json` as generated from relay's `updateSchema.js` script to `data/schema.json`.
+- Let relay client know your graphql server address
+  - If you run your app in virtual machine or real device, you need to set your graphql address in index.android.js and index.ios.js. for example:
 ```
 import Relay from 'react-relay';
 Relay.injectNetworkLayer(
   new Relay.DefaultNetworkLayer('http://192.168.62.1:8080/graphql')
 );
 ```
-- run your app
+- Run your app
   - `react-native run-android` or start ios version via xcode.
-- rename your app
-  - if everything working as expected, feel free to rename the app name to more attractive name then `fix`.
+- Rename your app
+  - The default app name is "fix". If everything working as expected, feel free to rename the app.
 
-## modified packages
+## Modified Packages
 
 - react-native
   - version: 0.13.0
@@ -38,9 +38,9 @@ Relay.injectNetworkLayer(
   - changes: 
     - https://github.com/skevy/fbjs/tree/react-native
 
-## todo
+## TODO
 - add basic graphql server for easy start
 
-## thanks
+## Thanks
 - @skevy. You did the real work.
 - @boourns
