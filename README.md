@@ -26,10 +26,12 @@ Relay.injectNetworkLayer(
     - https://github.com/lenaten/react-native-relay/commit/bd06b2a5ead23cfb66a07baccb259ccfc9e04f0c
 - relay
   - version: 0.4.0
-  - changes: https://github.com/skevy/relay/tree/react-native
+  - changes: 
+    - https://github.com/skevy/relay/tree/react-native
 - fbjs
   - version: 0.4.0
-  - changes: https://github.com/skevy/fbjs/tree/react-native
+  - changes: 
+    - https://github.com/skevy/fbjs/tree/react-native
 
 ## todo
 - add basic graphql server for easy start
