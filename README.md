@@ -7,7 +7,7 @@ Fix the compatibility issue as described in https://github.com/facebook/relay/is
 ## getting started 
 - `git clone https://github.com/lenaten/react-native-relay.git`
 - copy your `schema.json` as generated from relay's `updateSchema.js` script to `data/schema.json`.
-- set your graphql address in index.android.js and index.ios.js, for example:
+- if you run your app in virtual machine or real device, you need to set your graphql address in index.android.js and index.ios.js. for example:
 ```
 import Relay from 'react-relay';
 Relay.injectNetworkLayer(
