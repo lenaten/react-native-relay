@@ -22,7 +22,7 @@ $ git clone https://github.com/lenaten/react-native-relay.git
 $ cd react-native-relay
 $ cp ../relay-starter-kit/data/schema.json ./data/
   set emulator/device visible graphql address in config.js
-$ react-native run-android` or start ios version via xcode
+$ react-native run-android (or start ios version via xcode)
 ```
 
 ## Modified Packages
