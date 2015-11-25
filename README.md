@@ -20,7 +20,6 @@ $ npm start
 ```
 $ git clone https://github.com/lenaten/react-native-relay.git
 $ cd react-native-relay
-$ cp ../relay-starter-kit/data/schema.json ./data/
   set emulator/device visible graphql address in config.js
 $ react-native run-android (or start ios version via xcode)
 ```
@@ -32,6 +31,7 @@ $ react-native run-android (or start ios version via xcode)
   - changes: 
     - https://github.com/facebook/react-native/pull/3625
     - https://github.com/lenaten/react-native-relay/commit/bd06b2a5ead23cfb66a07baccb259ccfc9e04f0c
+    - rm React.Children.only constrains in react-relay/node_modules/react-static-container/lib/StaticContainer.react.js
 - relay
   - version: 0.4.0
   - changes: 
@@ -40,9 +40,6 @@ $ react-native run-android (or start ios version via xcode)
   - version: 0.4.0
   - changes: 
     - https://github.com/skevy/fbjs/tree/react-native
-
-## TODO
-- add basic graphql server for easy start
 
 ## Thanks
 - @skevy. You did the real work.
