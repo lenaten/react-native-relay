@@ -20,8 +20,8 @@ $ npm start
 #### ios
 ```
 $ git clone https://github.com/lenaten/react-native-relay.git
+$ open react-native-relay/ios/fix.xcodeproj
 ```
-Open react-native-relay/ios/fix.xcodeproj with xcode.
 
 #### android
 ```
