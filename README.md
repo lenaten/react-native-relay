@@ -8,18 +8,22 @@ Fix the compatibility issue as described in https://github.com/facebook/relay/is
 
 ### Run graphql server
 
-- `git clone https://github.com/relayjs/relay-starter-kit`
-- `cd relay-starter-kit`
-- `npm install`
-- `npm start`
+```
+$ git clone https://github.com/relayjs/relay-starter-kit
+$ cd relay-starter-kit
+$ npm install
+$ npm start
+```
 
 ### Run native app
 
-- `git clone https://github.com/lenaten/react-native-relay.git`
-- `cd react-native-relay`
-- `cp ../relay-starter-kit/data/schema.json ./data/`
-- set emulator/device visible graphql address in `config.js`
-- `react-native run-android` or start ios version via xcode.
+```
+$ git clone https://github.com/lenaten/react-native-relay.git
+$ cd react-native-relay
+$ cp ../relay-starter-kit/data/schema.json ./data/
+  set emulator/device visible graphql address in `config.js
+$ react-native run-android` or start ios version via xcode
+```
 
 ## Modified Packages
 
