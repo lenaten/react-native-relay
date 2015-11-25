@@ -1,52 +1,30 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
+/* @flow */
 'use strict';
 
-var React = require('react-native');
+import React from 'react-native';
+import Relay from 'react-relay';
+import FixApp from './src/components/FixApp';
+import ViewerRoute from './src/routes/ViewerRoute';
+import config from './config';
+
+Relay.injectNetworkLayer(
+  new Relay.DefaultNetworkLayer(config.graphqlURL)
+);
+
 var {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View,
 } = React;
 
-var fix = React.createClass({
-  render: function() {
+class fix extends React.Component {
+  render() {
+    var viewerRoute = new ViewerRoute();
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
+        <Relay.RootContainer
+           Component={FixApp}
+           route={viewerRoute}
+        />
     );
   }
-});
-
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+}
 
 AppRegistry.registerComponent('fix', () => fix);
