@@ -30,6 +30,11 @@ $ cd react-native-relay
 $ react-native run-android
 ```
 
+### Graphql URL Address
+
+The default IP address of graphql server is localhost(127.0.0.1). 
+When you run the app on emulator like genymotion or on real device, localhost is not accessible. The graphqlURL config in `config.js` must be updated to accessible one.
+
 ## Modified Packages
 
 - react-native
