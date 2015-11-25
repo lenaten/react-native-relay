@@ -6,14 +6,14 @@ Fix the compatibility issue as described in https://github.com/facebook/relay/is
 
 ## Getting Started
 
-### run graphql server
+### Run graphql server
 
 - `git clone https://github.com/relayjs/relay-starter-kit`
 - `cd relay-starter-kit`
 - `npm install`
 - `npm start`
 
-### native app
+### Run native app
 
 - `git clone https://github.com/lenaten/react-native-relay.git`
 - `cd react-native-relay`
