@@ -17,11 +17,17 @@ $ npm start
 
 ### Run native app
 
+#### ios
+```
+$ git clone https://github.com/lenaten/react-native-relay.git
+```
+Open react-native-relay/ios/fix.xcodeproj with xcode.
+
+#### android
 ```
 $ git clone https://github.com/lenaten/react-native-relay.git
 $ cd react-native-relay
-  set emulator/device visible graphql address in config.js
-$ react-native run-android (or start ios version via xcode)
+$ react-native run-android
 ```
 
 ## Modified Packages
