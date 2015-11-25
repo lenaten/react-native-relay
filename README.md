@@ -6,7 +6,7 @@ Fix the compatibility issue as described in https://github.com/facebook/relay/is
 
 ## Getting Started
 
-### Run graphql server
+### Run GraphQL Server
 
 ```
 $ git clone https://github.com/relayjs/relay-starter-kit
@@ -15,7 +15,7 @@ $ npm install
 $ npm start
 ```
 
-### Run native app
+### Run Native App
 
 #### ios
 ```
