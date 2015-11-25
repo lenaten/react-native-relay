@@ -35,6 +35,12 @@ $ react-native run-android
 The default IP address of graphql server is localhost(127.0.0.1). 
 When you run the app on emulator like genymotion or on real device, localhost is not accessible. The graphqlURL config in `config.js` must be updated to accessible one.
 
+#### Genymotion
+
+Find the network interface name in:
+VirtualBox ->  [Your Android VM] -> Settings -> Network -> Adapter Attached [0] To Host Only Adapter -> Name.
+Find the IP address with `ifconfig` command, then replace the localhost string in config.js with the IP address.
+
 ## Modified Packages
 
 - react-native
