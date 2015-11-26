@@ -4,21 +4,69 @@ import Simple from './Simple';
 import Collection from './Collection';
 
 var {
+  Navigator,
+  TouchableHighlight,
+  StyleSheet,
+  BackAndroid,
+  Text,
   View,
 } = React;
 
+var _navigator;
+BackAndroid.addEventListener('hardwareBackPress', () => {
+  if (_navigator && _navigator.getCurrentRoutes().length > 1) {
+    _navigator.pop();
+    return true;
+  }
+  return false;
+});
+
+
 var FixApp = React.createClass({
-  render() {
-    return (
-        <View>
+  renderScene(route, navigator) {
+    _navigator = navigator;
+    switch (route.id) {
+      case 'Simple':
+        return (
           <Simple
             viewer={this.props.viewer}
+            navigator={navigator}
           />
+        )
+      case 'Collection':
+        return (
           <Collection
             viewer={this.props.viewer}
+            navigator={navigator}
           />
-        </View>
-    )
+        )
+      default:
+        return (
+          <View style={styles.view}>
+            <TouchableHighlight onPress={() => _navigator.push({id: 'Simple'})}>
+              <Text style={styles.link}>Simple Example</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => _navigator.push({id: 'Collection'})}>
+              <Text style={styles.link}>Collection Example</Text>
+            </TouchableHighlight>
+          </View>
+        )
+    }
+  },
+
+  render() {
+    return (
+      <Navigator
+        initialRoute={{ id: '' }}
+        renderScene={this.renderScene}
+        configureScene={(route) => {
+          if (route.sceneConfig) {
+            return route.sceneConfig;
+          }
+          return Navigator.SceneConfigs.FloatFromBottom;
+        }}
+      />
+    );
   }
 });
 
@@ -30,5 +78,16 @@ export default Relay.createContainer(FixApp, {
         ${Collection.getFragment('viewer')},
       }
     `,
+  },
+});
+
+var styles = StyleSheet.create({
+  view: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  link: {
+    color: 'blue',
   },
 });
