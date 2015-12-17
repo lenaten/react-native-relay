@@ -12,18 +12,15 @@ package com.facebook.react.views.text;
 import javax.annotation.Nullable;
 
 import android.text.Spannable;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.TextView;
 
 import com.facebook.react.bridge.JSApplicationIllegalArgumentException;
 import com.facebook.react.uimanager.BaseViewManager;
-import com.facebook.react.uimanager.CatalystStylesDiffMap;
 import com.facebook.react.uimanager.PixelUtil;
 import com.facebook.react.uimanager.ReactProp;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.UIProp;
 import com.facebook.react.uimanager.ViewDefaults;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.common.annotations.VisibleForTesting;
@@ -84,11 +81,21 @@ public class ReactTextViewManager extends BaseViewManager<ReactTextView, ReactTe
 
   @Override
   public void updateExtraData(ReactTextView view, Object extraData) {
-    view.setText((Spanned) extraData);
+    ReactTextUpdate update = (ReactTextUpdate) extraData;
+    if (update.containsImages()) {
+      Spannable spannable = update.getText();
+      TextInlineImageSpan.possiblyUpdateInlineImageSpans(spannable, view);
+    }
+    view.setText(update);
   }
 
   @Override
-  public ReactTextShadowNode createCSSNodeInstance() {
+  public ReactTextShadowNode createShadowNodeInstance() {
     return new ReactTextShadowNode(false);
+  }
+
+  @Override
+  public Class<ReactTextShadowNode> getShadowNodeClass() {
+    return ReactTextShadowNode.class;
   }
 }

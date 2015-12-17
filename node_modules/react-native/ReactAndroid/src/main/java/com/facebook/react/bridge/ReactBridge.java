@@ -56,6 +56,19 @@ public class ReactBridge extends Countable {
     super.dispose();
   }
 
+  public void handleMemoryPressure(MemoryPressure level) {
+    switch (level) {
+      case MODERATE:
+        handleMemoryPressureModerate();
+        break;
+      case CRITICAL:
+        handleMemoryPressureCritical();
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown level: " + level);
+    }
+  }
+
   private native void initialize(
       JavaScriptExecutor jsExecutor,
       ReactCallback callback,
@@ -65,11 +78,13 @@ public class ReactBridge extends Countable {
    * All native functions are not thread safe and appropriate queues should be used
    */
   public native void loadScriptFromAssets(AssetManager assetManager, String assetName);
-  public native void loadScriptFromNetworkCached(String sourceURL, @Nullable String tempFileName);
+  public native void loadScriptFromFile(@Nullable String fileName, @Nullable String sourceURL);
   public native void callFunction(int moduleId, int methodId, NativeArray arguments);
   public native void invokeCallback(int callbackID, NativeArray arguments);
   public native void setGlobalVariable(String propertyName, String jsonEncodedArgument);
   public native boolean supportsProfiling();
   public native void startProfiler(String title);
   public native void stopProfiler(String title, String filename);
+  private native void handleMemoryPressureModerate();
+  private native void handleMemoryPressureCritical();
 }
