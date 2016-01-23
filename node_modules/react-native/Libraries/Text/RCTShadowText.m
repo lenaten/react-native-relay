@@ -16,7 +16,6 @@
 #import "RCTImageComponent.h"
 #import "RCTLog.h"
 #import "RCTShadowRawText.h"
-#import "RCTSparseArray.h"
 #import "RCTText.h"
 #import "RCTUtils.h"
 
@@ -31,7 +30,7 @@ NSString *const RCTReactTagAttributeName = @"ReactTagAttributeName";
   CGFloat _effectiveLetterSpacing;
 }
 
-static css_dim_t RCTMeasure(void *context, float width)
+static css_dim_t RCTMeasure(void *context, float width, float height)
 {
   RCTShadowText *shadowText = (__bridge RCTShadowText *)context;
   NSTextStorage *textStorage = [shadowText buildTextStorageForWidth:width];
@@ -55,6 +54,7 @@ static css_dim_t RCTMeasure(void *context, float width)
     _letterSpacing = NAN;
     _isHighlighted = NO;
     _textDecorationStyle = NSUnderlineStyleSingle;
+    _opacity = 1.0;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(contentSizeMultiplierDidChange:)
                                                  name:RCTUIManagerWillUpdateViewsDueToContentSizeMultiplierChangeNotification
@@ -80,14 +80,17 @@ static css_dim_t RCTMeasure(void *context, float width)
   [self dirtyText];
 }
 
-- (NSDictionary *)processUpdatedProperties:(NSMutableSet *)applierBlocks
-                          parentProperties:(NSDictionary *)parentProperties
+- (NSDictionary<NSString *, id> *)processUpdatedProperties:(NSMutableSet<RCTApplierBlock> *)applierBlocks
+                                          parentProperties:(NSDictionary<NSString *, id> *)parentProperties
 {
   parentProperties = [super processUpdatedProperties:applierBlocks
                                     parentProperties:parentProperties];
 
-  NSTextStorage *textStorage = [self buildTextStorageForWidth:self.frame.size.width];
-  [applierBlocks addObject:^(RCTSparseArray *viewRegistry) {
+  UIEdgeInsets padding = self.paddingAsInsets;
+  CGFloat width = self.frame.size.width - (padding.left + padding.right);
+
+  NSTextStorage *textStorage = [self buildTextStorageForWidth:width];
+  [applierBlocks addObject:^(NSDictionary<NSNumber *, RCTText *> *viewRegistry) {
     RCTText *view = viewRegistry[self.reactTag];
     view.textStorage = textStorage;
   }];
@@ -96,7 +99,7 @@ static css_dim_t RCTMeasure(void *context, float width)
 }
 
 - (void)applyLayoutNode:(css_node_t *)node
-      viewsWithNewFrame:(NSMutableSet *)viewsWithNewFrame
+      viewsWithNewFrame:(NSMutableSet<RCTShadowView *> *)viewsWithNewFrame
        absolutePosition:(CGPoint)absolutePosition
 {
   [super applyLayoutNode:node viewsWithNewFrame:viewsWithNewFrame absolutePosition:absolutePosition];
@@ -105,9 +108,6 @@ static css_dim_t RCTMeasure(void *context, float width)
 
 - (NSTextStorage *)buildTextStorageForWidth:(CGFloat)width
 {
-  UIEdgeInsets padding = self.paddingAsInsets;
-  width -= (padding.left + padding.right);
-
   if (_cachedTextStorage && width == _cachedTextStorageWidth) {
     return _cachedTextStorage;
   }
@@ -152,7 +152,10 @@ static css_dim_t RCTMeasure(void *context, float width)
                                     fontWeight:nil
                                      fontStyle:nil
                                  letterSpacing:nil
-                            useBackgroundColor:NO];
+                            useBackgroundColor:NO
+                               foregroundColor:self.color ?: [UIColor blackColor]
+                               backgroundColor:self.backgroundColor
+                                       opacity:self.opacity];
 }
 
 - (NSAttributedString *)_attributedStringWithFontFamily:(NSString *)fontFamily
@@ -161,6 +164,9 @@ static css_dim_t RCTMeasure(void *context, float width)
                                               fontStyle:(NSString *)fontStyle
                                           letterSpacing:(NSNumber *)letterSpacing
                                      useBackgroundColor:(BOOL)useBackgroundColor
+                                        foregroundColor:(UIColor *)foregroundColor
+                                        backgroundColor:(UIColor *)backgroundColor
+                                                opacity:(CGFloat)opacity
 {
   if (![self isTextDirty] && _cachedAttributedString) {
     return _cachedAttributedString;
@@ -188,7 +194,16 @@ static css_dim_t RCTMeasure(void *context, float width)
   for (RCTShadowView *child in [self reactSubviews]) {
     if ([child isKindOfClass:[RCTShadowText class]]) {
       RCTShadowText *shadowText = (RCTShadowText *)child;
-      [attributedString appendAttributedString:[shadowText _attributedStringWithFontFamily:fontFamily fontSize:fontSize fontWeight:fontWeight fontStyle:fontStyle letterSpacing:letterSpacing useBackgroundColor:YES]];
+      [attributedString appendAttributedString:
+        [shadowText _attributedStringWithFontFamily:fontFamily
+                                           fontSize:fontSize
+                                         fontWeight:fontWeight
+                                          fontStyle:fontStyle
+                                      letterSpacing:letterSpacing
+                                 useBackgroundColor:YES
+                                    foregroundColor:shadowText.color ?: foregroundColor
+                                    backgroundColor:shadowText.backgroundColor ?: backgroundColor
+                                            opacity:opacity * shadowText.opacity]];
     } else if ([child isKindOfClass:[RCTShadowRawText class]]) {
       RCTShadowRawText *shadowRawText = (RCTShadowRawText *)child;
       [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:shadowRawText.text ?: @""]];
@@ -208,14 +223,17 @@ static css_dim_t RCTMeasure(void *context, float width)
     [child setTextComputed];
   }
 
-  if (_color) {
-    [self _addAttribute:NSForegroundColorAttributeName withValue:_color toAttributedString:attributedString];
-  }
+  [self _addAttribute:NSForegroundColorAttributeName
+            withValue:[foregroundColor colorWithAlphaComponent:CGColorGetAlpha(foregroundColor.CGColor) * opacity]
+   toAttributedString:attributedString];
+
   if (_isHighlighted) {
     [self _addAttribute:RCTIsHighlightedAttributeName withValue:@YES toAttributedString:attributedString];
   }
-  if (useBackgroundColor && self.backgroundColor) {
-    [self _addAttribute:NSBackgroundColorAttributeName withValue:self.backgroundColor toAttributedString:attributedString];
+  if (useBackgroundColor && backgroundColor) {
+    [self _addAttribute:NSBackgroundColorAttributeName
+              withValue:[backgroundColor colorWithAlphaComponent:CGColorGetAlpha(backgroundColor.CGColor) * opacity]
+     toAttributedString:attributedString];
   }
 
   UIFont *font = [RCTConvert UIFont:nil withFamily:fontFamily
@@ -278,7 +296,7 @@ static css_dim_t RCTMeasure(void *context, float width)
     NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
     paragraphStyle.alignment = _textAlign;
     paragraphStyle.baseWritingDirection = _writingDirection;
-    CGFloat lineHeight = round(_lineHeight * self.fontSizeMultiplier);
+    CGFloat lineHeight = round(_lineHeight * (_allowFontScaling && self.fontSizeMultiplier > 0.0 ? self.fontSizeMultiplier : 1.0));
     paragraphStyle.minimumLineHeight = lineHeight;
     paragraphStyle.maximumLineHeight = lineHeight;
     [attributedString addAttribute:NSParagraphStyleAttributeName
@@ -287,21 +305,30 @@ static css_dim_t RCTMeasure(void *context, float width)
   }
 
   // Text decoration
-  if(_textDecorationLine == RCTTextDecorationLineTypeUnderline ||
-     _textDecorationLine == RCTTextDecorationLineTypeUnderlineStrikethrough) {
+  if (_textDecorationLine == RCTTextDecorationLineTypeUnderline ||
+      _textDecorationLine == RCTTextDecorationLineTypeUnderlineStrikethrough) {
     [self _addAttribute:NSUnderlineStyleAttributeName withValue:@(_textDecorationStyle)
      toAttributedString:attributedString];
   }
-  if(_textDecorationLine == RCTTextDecorationLineTypeStrikethrough ||
-     _textDecorationLine == RCTTextDecorationLineTypeUnderlineStrikethrough){
+  if (_textDecorationLine == RCTTextDecorationLineTypeStrikethrough ||
+      _textDecorationLine == RCTTextDecorationLineTypeUnderlineStrikethrough){
     [self _addAttribute:NSStrikethroughStyleAttributeName withValue:@(_textDecorationStyle)
      toAttributedString:attributedString];
   }
-  if(_textDecorationColor) {
+  if (_textDecorationColor) {
     [self _addAttribute:NSStrikethroughColorAttributeName withValue:_textDecorationColor
      toAttributedString:attributedString];
     [self _addAttribute:NSUnderlineColorAttributeName withValue:_textDecorationColor
      toAttributedString:attributedString];
+  }
+
+  // Text shadow
+  if (!CGSizeEqualToSize(_textShadowOffset, CGSizeZero)) {
+    NSShadow *shadow = [NSShadow new];
+    shadow.shadowOffset = _textShadowOffset;
+    shadow.shadowBlurRadius = _textShadowRadius;
+    shadow.shadowColor = _textShadowColor;
+    [self _addAttribute:NSShadowAttributeName withValue:shadow toAttributedString:attributedString];
   }
 }
 
@@ -352,6 +379,10 @@ RCT_TEXT_PROPERTY(TextDecorationColor, _textDecorationColor, UIColor *);
 RCT_TEXT_PROPERTY(TextDecorationLine, _textDecorationLine, RCTTextDecorationLineType);
 RCT_TEXT_PROPERTY(TextDecorationStyle, _textDecorationStyle, NSUnderlineStyle);
 RCT_TEXT_PROPERTY(WritingDirection, _writingDirection, NSWritingDirection)
+RCT_TEXT_PROPERTY(Opacity, _opacity, CGFloat)
+RCT_TEXT_PROPERTY(TextShadowOffset, _textShadowOffset, CGSize);
+RCT_TEXT_PROPERTY(TextShadowRadius, _textShadowRadius, CGFloat);
+RCT_TEXT_PROPERTY(TextShadowColor, _textShadowColor, UIColor *);
 
 - (void)setAllowFontScaling:(BOOL)allowFontScaling
 {

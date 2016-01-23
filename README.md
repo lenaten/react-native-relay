@@ -4,7 +4,7 @@
 
 A working version of react-native with relay.
 
-Fix the compatibility issue as described in https://github.com/facebook/relay/issues/26. 
+Fix the compatibility issue as described in https://github.com/facebook/relay/issues/26.
 
 ## Getting Started
 
@@ -34,7 +34,7 @@ $ react-native run-android
 
 ### Graphql URL Address
 
-The default IP address of graphql server is localhost(127.0.0.1). 
+The default IP address of graphql server is localhost(127.0.0.1).
 When you run the app on emulator like genymotion or on real device, localhost is not accessible. The graphqlURL config in `config.js` must be updated to accessible one.
 
 #### Genymotion
@@ -43,22 +43,25 @@ Find the network interface name in:
 VirtualBox ->  [Your Android VM] -> Settings -> Network -> Adapter Attached [0] To Host Only Adapter -> Name.
 Find the IP address with `ifconfig` command, then replace the localhost string in config.js with the IP address.
 
+### babelRelayPlugin.js
+The modified version of react-native explicitly looks for `babelRelayPlugin.js` in `<projectRoot>/scripts`.
+
 ## Modified Packages
 
 - react-native
-  - version: 0.13.0
-  - changes: 
-    - https://github.com/facebook/react-native/pull/3625
-    - https://github.com/lenaten/react-native-relay/commit/bd06b2a5ead23cfb66a07baccb259ccfc9e04f0c
-    - rm React.Children.only constrains in react-relay/node_modules/react-static-container/lib/StaticContainer.react.js
+  - version: 0.18.0 (self built)
+  - changes:
+    - https://github.com/facebook/react-native/pull/5084
+    - https://github.com/facebook/react-native/pull/5214
 - relay
-  - version: 0.4.0
-  - changes: 
-    - https://github.com/skevy/relay/tree/react-native
+  - version: 0.6.0 (self built)
+  - changes:
+    - https://github.com/facebook/relay/pull/713
+    - https://github.com/facebook/relay/pull/714
 - fbjs
-  - version: 0.4.0
-  - changes: 
-    - https://github.com/skevy/fbjs/tree/react-native
+  - version: 0.7.0 (self-built)
+  - changes:
+    - https://github.com/facebook/fbjs/pull/95
 
 ## Thanks
 - @skevy. You did the real work.
