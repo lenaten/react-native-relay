@@ -2,7 +2,8 @@
   "name": "react-native-relay",
   "version": "0.0.1",
   "dependencies": {
-    "react-native": "0.13.0",
-    "react-relay": "0.4.0"
+    "babel-relay-plugin": "0.6.1",
+    "react-native": "file:///Users/ythen/github.com/react-native",
+    "react-relay": "0.6.0"
   }
 }
