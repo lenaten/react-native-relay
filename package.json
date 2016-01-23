@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "dependencies": {
     "babel-relay-plugin": "0.6.1",
-    "react-native": "file:///Users/ythen/github.com/react-native",
+    "react-native": "0.18.0",
     "react-relay": "0.6.0"
   }
 }
