@@ -8,7 +8,7 @@
  */
 'use strict';
 
-const fs = require('graceful-fs');
+const fs = require('fs');
 
 function loadCacheSync(cachePath) {
   if (!fs.existsSync(cachePath)) {
