@@ -1,3 +1,6 @@
+# NOTE
+The problem was solved, please don't use this project anymore. Thanks.
+
 # react-native-relay
 
 [![Join the chat at https://gitter.im/lenaten/react-native-relay](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/lenaten/react-native-relay?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
